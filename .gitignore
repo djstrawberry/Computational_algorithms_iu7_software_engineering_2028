@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+venv/
+env/
+__pycache__/
+*.egg-info/
+
+# Build outputs
+dist/
+build/
+*.o
+*.obj
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Cache
+.pytest_cache/
+.cache/
+*.tmp
