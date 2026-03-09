@@ -1,6 +1,30 @@
 from .config import INTERPOLATION_DEGREES
 import bisect
 
+def interpolate_by_1D_Newton(x: float, x_args: list, y_args: list, degree: int) -> float:
+
+    nodes_quantity = degree + 1
+    nodes = get_nearest_nodes(x, x_args, nodes_quantity)
+    x_local = [x_args[i] for i in nodes]
+    y_local = [y_args[i] for i in nodes]
+    divided_differences = compute_divided_differences(x_local, y_local)
+
+    return calculate_Newton_polynomial(x, x_local, divided_differences)
+
+def interpolate_by_2D_Newton(T: float, p: float, T_args: list, p_args: list, values: list, degree: int) -> float:
+
+    nodes_quantity = degree + 1
+
+    T_nodes = get_nearest_nodes(T, T_args, nodes_quantity)
+    values_at_p = []
+    for i in range(len(T_nodes)):
+        T_local = T_args[i]
+        row_values = values[i]
+
+        values_at_p.append(interpolate_by_1D_Newton(p, p_args, row_values, nodes_quantity - 1))
+
+    return interpolate_by_1D_Newton(T, T_args, values_at_p, nodes_quantity - 1)
+
 def calculate_Newton_polynomial(x: float, x_args: list, coefficients: list) -> float:
 
     polynomial_value = 0
@@ -11,16 +35,6 @@ def calculate_Newton_polynomial(x: float, x_args: list, coefficients: list) -> f
         product *= x - x_args[i]
 
     return polynomial_value
-
-def interpolate_by_1D_Newton(x: float, x_args: list, y_args: list, degree: int) -> float:
-
-    nodes_quantity = degree + 1
-    nodes = get_nearest_nodes(x, x_args, nodes_quantity)
-    x_local = [x_args[i] for i in nodes]
-    y_local = [y_args[i] for i in nodes]
-    divided_differences = compute_divided_differences(x_local, y_local)
-    return calculate_Newton_polynomial(x, x_local, divided_differences)
-
 
 def compute_divided_differences(x_args: list, y_args: list) -> list:
 
