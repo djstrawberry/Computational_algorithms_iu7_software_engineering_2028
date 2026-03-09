@@ -1,5 +1,6 @@
 from src.interpolation import get_nearest_nodes, compute_divided_differences, \
 calculate_Newton_polynomial, interpolate_by_1D_Newton, interpolate_by_2D_Newton
+
 EPS = 1e-10
 
 # -----------------------------------
@@ -54,7 +55,6 @@ def test_calculate_Newton_polynomial():
 # ---------------------------------------------
 # Тест для функции interpolate_by_1D_Newton
 # ---------------------------------------------
-
 def test_interpolate_by_1D_Newton():
     x_args = [1, 2, 3]
     y_args = [1, 4, 9]
@@ -66,7 +66,6 @@ def test_interpolate_by_1D_Newton():
 # ---------------------------------------------
 # Тест для функции interpolate_by_2D_Newton
 # ---------------------------------------------
-
 def test_interpolate_by_2D_Newton():
     T_args = [1, 2, 3]
     p_args = [1, 2, 3]
