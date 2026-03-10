@@ -1,6 +1,5 @@
 from .interpolation import interpolate_by_2D_Newton
-
-EPS = 1e-6
+from .config import EPS
 
 def find_pressure_by_dichotomy(T: float, N_known: float, T_args: list, p_args: list, N_values: list, degree: int, p_min: float, p_max: float) -> float:
 
@@ -11,7 +10,6 @@ def find_pressure_by_dichotomy(T: float, N_known: float, T_args: list, p_args: l
 
         if abs(f_median) < EPS:
             return p_median
-
         if f_median * f_min < 0:
             p_max = p_median
         else:
