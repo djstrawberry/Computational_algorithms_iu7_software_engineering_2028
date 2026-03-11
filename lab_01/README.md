@@ -1,0 +1,1 @@
+![plot](https://github.com/djstrawberry/Computational_algorithms_iu7_software_engineering_2028/blob/master/lab_01/results/plot.png)
