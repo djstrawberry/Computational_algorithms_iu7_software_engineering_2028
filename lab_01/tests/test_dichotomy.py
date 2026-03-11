@@ -27,7 +27,8 @@ def test_find_pressure_by_dichotomy():
         T_args=T_args,
         p_args=p_args,
         N_values=N_values,
-        degree=2,
+        T_degree=2,
+        p_degree=2,
         p_min=p_min,
         p_max=p_max
     )

@@ -1,11 +1,20 @@
+import os
+
 import config as config
-from .file_reader import load_tables
-from .model import get_model_params
+from solver import solve_equation
+from file_reader import load_tables
+from draw import plot_results
 
 def main():
 
     params = config.build_params()
-    tables = load_tables("data")
+    
+    base_dir = os.path.dirname(os.path.dirname(__file__))
+    data_dir = os.path.join(base_dir, "data")
+    tables = load_tables(data_dir)
+    results = solve_equation(params, tables)
+    plot_results(results)
 
 if __name__ == "__main__":
     main()
+

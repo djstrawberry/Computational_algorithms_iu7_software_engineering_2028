@@ -28,7 +28,7 @@ def test_get_nearest_nodes_right_edge():
     assert nodes == [2, 3, 4]
 
 # ---------------------------------------------
-# Тесты для функции compute_divided_differences
+# Тест для функции compute_divided_differences
 # ---------------------------------------------
 def test_compute_divided_differences():
     x_args = [1, 2, 3]
@@ -42,7 +42,7 @@ def test_compute_divided_differences():
     assert divided_differences[2] == 1
 
 # ---------------------------------------------
-# Тесты для функции calculate_Newton_polynomial
+# Тест для функции calculate_Newton_polynomial
 # ---------------------------------------------
 def test_calculate_Newton_polynomial():
     x_args = [1, 2, 3]
@@ -71,6 +71,6 @@ def test_interpolate_by_2D_Newton():
     p_args = [1, 2, 3]
     values = [[1, 4, 9], [4, 16, 36], [9, 36, 81]]
 
-    interpolated_value = interpolate_by_2D_Newton(2.5, 2.5, T_args, p_args, values, 2)
+    interpolated_value = interpolate_by_2D_Newton(2.5, 2.5, T_args, p_args, values, 2, 2)
 
     assert abs(interpolated_value - 39.0625) < EPS

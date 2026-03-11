@@ -1,12 +1,15 @@
-from .interpolation import interpolate_by_2D_Newton
-from .config import EPS
+from interpolation import interpolate_by_2D_Newton
+from config import EPS
 
-def find_pressure_by_dichotomy(T: float, N_known: float, T_args: list, p_args: list, N_values: list, degree: int, p_min: float, p_max: float) -> float:
+def find_pressure_by_dichotomy(T: float, N_known: float, T_args: list, 
+                               p_args: list, N_values: list, T_degree: int, p_degree: int,
+                               p_min: float, p_max: float) -> float:
 
+    f_min = N_difference(p_min, T, T_args, p_args, N_values, T_degree, p_degree, N_known)
+    
     while abs(p_max - p_min) > EPS:
         p_median = (p_max + p_min) / 2
-        f_median = N_difference(p_median, T, T_args, p_args, N_values, degree, N_known)
-        f_min = N_difference(p_min, T, T_args, p_args, N_values, degree, N_known)
+        f_median = N_difference(p_median, T, T_args, p_args, N_values, T_degree, p_degree, N_known)
 
         if abs(f_median) < EPS:
             return p_median
@@ -17,8 +20,9 @@ def find_pressure_by_dichotomy(T: float, N_known: float, T_args: list, p_args: l
 
     return (p_max + p_min) / 2
 
-def N_difference(p: float, T: float, T_args: list, p_args: list, N_values: list, degree: int,N_known: float) -> float:
+def N_difference(p: float, T: float, T_args: list, p_args: list, N_values: list,
+                 T_degree: int, p_degree: int, N_known: float) -> float:
    
-    N_interpolated = interpolate_by_2D_Newton(T, p, T_args, p_args, N_values, degree)
+    N_interpolated = interpolate_by_2D_Newton(T, p, T_args, p_args, N_values, T_degree, p_degree)
 
     return N_interpolated - N_known 

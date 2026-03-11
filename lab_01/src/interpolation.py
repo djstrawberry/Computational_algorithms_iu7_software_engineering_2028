@@ -1,29 +1,33 @@
-from .config import INTERPOLATION_DEGREES
 import bisect
 
 def interpolate_by_1D_Newton(x: float, x_args: list, y_args: list, degree: int) -> float:
 
+    x_clamped = max(x_args[0], min(x, x_args[-1]))
+    
     nodes_quantity = degree + 1
-    nodes = get_nearest_nodes(x, x_args, nodes_quantity)
+    nodes = get_nearest_nodes(x_clamped, x_args, nodes_quantity)
     x_local = [x_args[i] for i in nodes]
     y_local = [y_args[i] for i in nodes]
     divided_differences = compute_divided_differences(x_local, y_local)
 
-    return calculate_Newton_polynomial(x, x_local, divided_differences)
+    return calculate_Newton_polynomial(x_clamped, x_local, divided_differences)
 
-def interpolate_by_2D_Newton(T: float, p: float, T_args: list, p_args: list, values: list, degree: int) -> float:
+def interpolate_by_2D_Newton(T: float, p: float, T_args: list, p_args: list, values: list,
+                             T_degree: int, p_degree: int) -> float:
 
-    nodes_quantity = degree + 1
+    T_clamped = max(T_args[0], min(T, T_args[-1]))
+    p_clamped = max(p_args[0], min(p, p_args[-1]))
 
-    T_nodes = get_nearest_nodes(T, T_args, nodes_quantity)
+    T_nodes = get_nearest_nodes(T_clamped, T_args, T_degree + 1)
     values_at_p = []
-    for i in range(len(T_nodes)):
-        T_local = T_args[i]
+    T_local = []
+    for i in T_nodes:
+        T_local.append(T_args[i])
         row_values = values[i]
 
-        values_at_p.append(interpolate_by_1D_Newton(p, p_args, row_values, nodes_quantity - 1))
+        values_at_p.append(interpolate_by_1D_Newton(p_clamped, p_args, row_values, p_degree))
 
-    return interpolate_by_1D_Newton(T, T_args, values_at_p, nodes_quantity - 1)
+    return interpolate_by_1D_Newton(T_clamped, T_local, values_at_p, T_degree)
 
 def calculate_Newton_polynomial(x: float, x_args: list, coefficients: list) -> float:
 
@@ -52,9 +56,12 @@ def compute_divided_differences(x_args: list, y_args: list) -> list:
 
 
 def get_nearest_nodes(x: float, x_args: list, nodes_quantity: int) -> list:
-
+ 
     if (nodes_quantity > len(x_args)):
         raise ValueError("Количество узлов должно быть меньше количества точек в таблице.")
+    
+    if nodes_quantity == len(x_args):
+        return list(range(len(x_args)))
     
     right = find_x_position(x, x_args)
     left = right - 1

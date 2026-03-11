@@ -1,11 +1,12 @@
 import math
 
-from .model import get_model_params
-from .interpolation import interpolate_by_1D_Newton
-from .config import EPS
+from model import get_model_params
+from interpolation import interpolate_by_1D_Newton
+from config import EPS
+from config import INTERPOLATION_DEGREES
 
 def solve_equation(params: dict, tables: dict) -> dict:
-    
+
     time_grid = build_time_grid(params["t0"], params["tk"], params["tau"])
     results = init_results_dict()
 
@@ -50,9 +51,9 @@ def init_results_dict() -> dict:
 
 def compute_step_state(t: float, T: float, params: dict, tables: dict) -> dict:
     
-    current_I = interpolate_by_1D_Newton(t, tables["I_t"]["x"], tables["I_t"]["y"], params["degree"])
+    current_I = interpolate_by_1D_Newton(t, tables["I_t"]["x"], tables["I_t"]["y"], INTERPOLATION_DEGREES["I_t_degree"])
 
-    p, sigma, c, q = get_model_params(T, params["N_known"], tables, params["degree"], params["p_min"], params["p_max"])
+    p, sigma, c, q = get_model_params(T, params["N_known"], tables, INTERPOLATION_DEGREES, params["p_min"], params["p_max"])
 
     current_j = current_I / (math.pi * params["R"] ** 2)
 
@@ -95,7 +96,9 @@ def make_Runge_Kutta_step(t: float, T: float, step_state: dict, params: dict, ta
 
 def compute_dT_dt(step_state: dict) -> float:
 
-    return (step_state["sigma"] * step_state["j"] ** 2- step_state["q"]) / step_state["c"]
+    q_joule = (step_state["j"] ** 2) / step_state["sigma"]
+    
+    return (q_joule - step_state["q"]) / step_state["c"]
 
 def compute_results(results: dict, step_state: dict, params: dict) -> None:
     

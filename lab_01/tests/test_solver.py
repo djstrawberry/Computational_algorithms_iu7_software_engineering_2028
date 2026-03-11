@@ -1,9 +1,8 @@
 from src.solver import build_time_grid
 
 #---------------------------------
-# Тест для функции build_time_grid
+# Тесты для функции build_time_grid
 #---------------------------------
-
 def test_build_time_grid_round():
     t0 = 0.0
     tk = 1.0
